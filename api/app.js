@@ -11,6 +11,14 @@ const { List, Task } = require('./db/models')
 //Load middlewares
 app.use(bodyParser.json())
 
+// CORS Header Middleware
+app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+      });
+      
+
 /* ROUTE HANDLERS */
 
 
@@ -83,8 +91,12 @@ app.get('/lists/:listId/tasks',(req,res)=>{
                 res.send(tasks);
         })
 })
-
+/**
+ * GET /lists/:listId/tasks/:taskId
+ * Purpose: Get a specific tasks in a specific list
+ */
 app.get('/lists/:listId/tasks/:taskId',(req,res)=>{
+        //We want to return a specific tasks that belong to a specific list
         Task.findOne({
                 _id:req.params.taskId,
                 _listId: req.params.listId
